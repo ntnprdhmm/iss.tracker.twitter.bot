@@ -50,10 +50,9 @@
         // Update map
         moveToLocation(lat, lng);
         drawMarker(lat, lng);
-
         // Get name of the city of the current location
         // do nothing in the catch => it's simply because the location can't be found
-        getCountryCode(parseFloat(lat), parseFloat(lng))
+        getCountryCode()
 
       }).catch(()=>{})
   }
@@ -107,8 +106,8 @@
    * @param  {string} lat : the latitude
    * @param  {string} lng : the longitude
    */
-  function getCountryCode(lat, lng) {
-    axios.get(`http://api.geonames.org/findNearbyPostalCodesJSON?lat=${lat}&lng=${lng}&username=iss_utt_bot`).then(geoname=>{
+  function getCountryCode() {
+    axios.get(`http://api.geonames.org/findNearbyPostalCodesJSON?lat=${parseFloat(lat)}&lng=${parseFloat(lng)}&username=iss_utt_bot`).then(geoname=>{
         if (geoname.data.postalCodes[0]) {
           const countryCode = geoname.data.postalCodes[0].countryCode;
           if (previousCountryCode != countryCode) {
@@ -116,6 +115,8 @@
             getCountry(countryCode);
           }
         }
+      }).catch(e => {
+        console.log(e);
       });
   }
 
