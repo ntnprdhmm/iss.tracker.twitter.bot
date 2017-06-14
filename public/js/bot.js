@@ -147,7 +147,7 @@
    * @param  {string} message The content of the message
    */
   function sendTweet(message) {
-      axios.post('/tweet',{status:message,lat:lat,lng:lng}).then(()=>{
+      axios.post('/api/tweet',{status:message,lat:lat,lng:lng}).then(()=>{
         createTimeline()
       }).catch((d)=>{console.log(d)}) //Just Because
   }
