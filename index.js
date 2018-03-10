@@ -7,6 +7,8 @@ const Twitter = require('twitter')
 const tweetHelper = require('./helpers/tweet')
 
 const app = express()
+const server = require('http').createServer(app)
+const io = require('socket.io')(server)
 const client = new Twitter({
 	consumer_key: process.env.CONSUMER_KEY,
 	consumer_secret: process.env.CONSUMER_KEY_SECRET,
@@ -63,9 +65,13 @@ apiRouter.route('/tweet')
 	})
  	.get((req, res, next) => {
 	 	client.get('statuses/user_timeline', (req, tweets, resp) => {
-			res.json(tweetHelper.buildTweets(tweets))
+			res.json(tweetHelper.formatTweets(tweets))
 		})
  	})
 
+io.on('connection', (socket) => {
+  console.log('a user connected')
+})
+
 // RUN SERVER
-app.listen(PORT, () => console.log(`Server listening on port ${PORT}`))
+server.listen(PORT, () => console.log(`Server listening on port ${PORT}`))
