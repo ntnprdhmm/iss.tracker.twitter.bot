@@ -14,4 +14,3 @@ const formatTweet = tweet => {
 }
 
 exports.formatTweet = tweet => formatTweet(tweet)
-exports.formatTweets = tweets => tweets.map(tweet => formatTweet(tweet))

@@ -30,18 +30,3 @@ exports.createTweet = data => {
       })
   })
 }
-
-exports.fetchTweets = () => {
-  return new Promise((resolve, reject) => {
-    client.get('statuses/user_timeline')
-      .then(res => {
-        console.log(res)
-        //tweetHelper.formatTweets(tweets)
-        resolve(res)
-      })
-      .catch(e => {
-        console.log("Failed to fetch tweets")
-        reject(e)
-      })
-  })
-}

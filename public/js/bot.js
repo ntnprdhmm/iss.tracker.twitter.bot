@@ -1,15 +1,15 @@
 const socket = io()
 socket.on('data', data => updateMap(data))
 
-let marker,
-    map,
-    geocoder;
+let marker = null
+let map = null
+let geocoder = null
 
 createTimeline()
 initMap()
 
 /**
- * Create twitter timeline, delete previous timeline
+ * Create Twitter timeline
  */
 function createTimeline(){
   let timeline = document.getElementById('timeline')
@@ -19,7 +19,7 @@ function createTimeline(){
   twttr.widgets.createTimeline(
     {
       sourceType: 'profile',
-      screenName: 'UTT_ISS_BOT'
+      screenName: 'ISS_bot_tracker'
     },
     timeline,
     {
