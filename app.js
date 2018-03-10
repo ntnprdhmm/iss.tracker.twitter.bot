@@ -3,19 +3,12 @@ require('dotenv').config()
 const express = require('express')
 const path = require('path')
 const bodyParser = require("body-parser")
-const Twitter = require('twitter')
 const tweetHelper = require('./helpers/tweet')
-const main = require('./services/main');
+const main = require('./services/main')
 
 const app = express()
 const server = require('http').createServer(app)
 const io = require('socket.io')(server)
-const client = new Twitter({
-	consumer_key: process.env.CONSUMER_KEY,
-	consumer_secret: process.env.CONSUMER_KEY_SECRET,
-	access_token_key: process.env.TOKEN,
-	access_token_secret: process.env.TOKEN_SECRET
-})
 const apiRouter = express.Router()
 
 const PORT = 3000
@@ -52,24 +45,6 @@ apiRouter.get('/', (req,res) => {
 	})
 })
 
-// Route to get all tweet or post a tweet
-apiRouter.route('/tweet')
-	.post((req, res, next) => {
-		client.post('statuses/update', {
-		 	status: req.body.status,
-		 	lat: req.body.lat,
-		 	long: req.body.lng,
-		 	display_coordinates: true
-		}, e => {
-		 	console.log(e)
-	 	})
-	})
- 	.get((req, res, next) => {
-	 	client.get('statuses/user_timeline', (req, tweets, resp) => {
-			res.json(tweetHelper.formatTweets(tweets))
-		})
- 	})
-
 io.on('connection', (socket) => {
   console.log('a user connected')
 })
@@ -77,7 +52,11 @@ io.on('connection', (socket) => {
 // FETCH NEW DATA EVERY 3 SECONDS
 setInterval(_ => {
 	main.fetchISSData()
-		.then(data => io.sockets.emit('data', data))
+		.then(data => {
+			console.log(data)
+			io.sockets.emit('data', data)
+		})
+		.catch(e => console.log(e))
 }, 3000)
 
 // RUN SERVER

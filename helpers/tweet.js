@@ -1,8 +1,8 @@
-exports.formatTweets = tweets => tweets.map(tweet => {
+const formatTweet = tweet => {
   return {
     time: tweet.created_at,
     text: tweet.text,
-    url: `https://twitter.com/UTT_ISS_BOT/status/${tweet.id_str}`,
+    url: `https://twitter.com/ISS_bot_tracker/status/${tweet.id_str}`,
     geo: {
       lat: tweet.coordinates.coordinates[0],
       lng: tweet.coordinates.coordinates[1],
@@ -11,4 +11,7 @@ exports.formatTweets = tweets => tweets.map(tweet => {
       country_code: tweet.place ? tweet.place.country_code : ""
     }
   }
-})
+}
+
+exports.formatTweet = tweet => formatTweet(tweet)
+exports.formatTweets = tweets => tweets.map(tweet => formatTweet(tweet))
