@@ -5,6 +5,7 @@ const path = require('path')
 const bodyParser = require("body-parser")
 const Twitter = require('twitter')
 const tweetHelper = require('./helpers/tweet')
+const main = require('./services/main');
 
 const app = express()
 const server = require('http').createServer(app)
@@ -72,6 +73,12 @@ apiRouter.route('/tweet')
 io.on('connection', (socket) => {
   console.log('a user connected')
 })
+
+// FETCH NEW DATA EVERY 3 SECONDS
+setInterval(_ => {
+	main.fetchISSData()
+		.then(data => io.sockets.emit('data', data))
+}, 3000)
 
 // RUN SERVER
 server.listen(PORT, () => console.log(`Server listening on port ${PORT}`))
